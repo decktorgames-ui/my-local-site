@@ -1,1 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Favorite</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+
+    background:linear-gradient(135deg,#141E30,#243B55);
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+
+    padding:40px;
+}
+
+.container{
+
+    width:900px;
+    max-width:100%;
+
+    background:rgba(255,255,255,.08);
+
+    backdrop-filter:blur(15px);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    box-shadow:0 0 40px rgba(0,0,0,.4);
+
+}
+
+h1{
+
+    text-align:center;
+
+    color:white;
+
+    margin-bottom:30px;
+
+    font-size:40px;
+
+}
+
+.inputBox{
+
+    display:flex;
+
+    gap:15px;
+
+    flex-wrap:wrap;
+
+}
+
+.inputBox input{
+
+    flex:1;
+
+    min-width:250px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:15px;
+
+    outline:none;
+
+    font-size:18px;
+
+}
+
+#addButton{
+
+    width:170px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    background:#4CAF50;
+
+    color:white;
+
+    font-size:18px;
+
+    transition:.3s;
+
+}
+
+#addButton:hover{
+
+    transform:scale(1.05);
+
+}
+
+#line{
+
+    width:100%;
+
+    height:2px;
+
+    background:white;
+
+    opacity:.2;
+
+    margin:30px 0;
+
+}
+
+#list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+.card{
+
+    background:rgba(255,255,255,.12);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    animation:show .3s;
+
+}
+
+.left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.name{
+
+    color:white;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+}
+
+.url{
+
+    color:#cfcfcf;
+
+    font-size:15px;
+
+    word-break:break-all;
+
+}
+
+.open{
+
+    padding:12px 20px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#3f8cff;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    transition:.2s;
+
+}
+
+.open:hover{
+
+    transform:scale(1.08);
+
+}
+
+@keyframes show{
+
+from{
+
+opacity:0;
+
+transform:translateY(-15px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>⭐ Favorite</h1>
+
+<div class="inputBox">
+
+<input
+id="title"
+type="text"
+placeholder="Название сайта">
+
+<input
+id="link"
+type="text"
+placeholder="https://example.com">
+
+<button id="addButton">
+
+Добавить
+
+</button>
+
+</div>
+
+<div id="line"></div>
+
+<div id="list"></div>
+
+</div>
+<script>
+
+const titleInput = document.getElementById("title");
+const linkInput = document.getElementById("link");
+const addButton = document.getElementById("addButton");
+const list = document.getElementById("list");
+
+addButton.onclick = function(){
+
+    const title = titleInput.value.trim();
+    const link = linkInput.value.trim();
+
+    if(title === "" || link === ""){
+        alert("Заполните все поля.");
+        return;
+    }
+
+    createCard(title, link);
+
+    titleInput.value = "";
+    linkInput.value = "";
+
+}
+
+function createCard(title, link){
+
+    const card = document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+        <div class="left">
+
+            <div class="name">${title}</div>
+
+            <div class="url">${link}</div>
+
+        </div>
+
+        <div class="right">
+
+            <button class="open">Открыть</button>
+
+        </div>
+    `;
+
+    card.querySelector(".open").onclick = function(){
+        window.open(link, "_blank");
+    }
+
+    list.appendChild(card);
+
+}
+
+</script>
+</body>
+</html>
