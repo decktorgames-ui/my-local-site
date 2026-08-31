@@ -226,6 +226,98 @@ transform:translateY(0);
 }
 
 }
+
+.right{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+.edit{
+
+    background:#ff9800;
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 15px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.delete{
+
+    background:#e53935;
+
+    color:white;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:12px 15px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.edit:hover,
+.delete:hover{
+
+    transform:scale(1.08);
+
+}
+
+.pin{
+
+background:#ffd54f;
+
+border:none;
+
+border-radius:12px;
+
+padding:12px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.copy{
+
+background:#7E57C2;
+
+color:white;
+
+border:none;
+
+border-radius:12px;
+
+padding:12px;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.pin:hover,
+.copy:hover{
+
+transform:scale(1.08);
+
+}
 </style>
 
 </head>
@@ -236,7 +328,21 @@ transform:translateY(0);
 <h1>⭐ Favorite</h1>
 
 <div class="inputBox">
-
+    
+<input
+id="search"
+type="text"
+placeholder="🔍 Поиск..."
+style="
+margin-top:20px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+outline:none;
+font-size:18px;
+">
+    
 <input
 id="title"
 type="text"
@@ -266,6 +372,7 @@ const titleInput = document.getElementById("title");
 const linkInput = document.getElementById("link");
 const addButton = document.getElementById("addButton");
 const list = document.getElementById("list");
+const search = document.getElementById("search");
 
 addButton.onclick = function(){
 
@@ -279,9 +386,10 @@ addButton.onclick = function(){
 
     createCard(title, link);
 
+    saveCards();
+
     titleInput.value = "";
     linkInput.value = "";
-
 }
 
 function createCard(title, link){
@@ -301,19 +409,128 @@ function createCard(title, link){
 
         <div class="right">
 
-            <button class="open">Открыть</button>
+    <button class="pin">⭐</button>
+
+    <button class="open">Открыть</button>
+
+    <button class="edit">✏</button>
+
+    <button class="copy">📋</button>
+
+    <button class="delete">🗑</button>
 
         </div>
     `;
 
+    // Открыть сайт
     card.querySelector(".open").onclick = function(){
-        window.open(link, "_blank");
-    }
+        window.open(link,"_blank");
+    };
+
+    // Удалить
+    card.querySelector(".delete").onclick = function(){
+
+        card.remove();
+
+        saveCards();
+
+    };
+
+    card.querySelector(".pin").onclick = function(){
+
+    list.prepend(card);
+
+    saveCards();
+
+};
+
+    card.querySelector(".copy").onclick = function(){
+
+    navigator.clipboard.writeText(link);
+
+    alert("Ссылка скопирована!");
+
+};
+
+    // Редактировать
+    card.querySelector(".edit").onclick = function(){
+
+        const newTitle = prompt("Новое название:", title);
+
+        if(newTitle == null) return;
+
+        const newLink = prompt("Новая ссылка:", link);
+
+        if(newLink == null) return;
+
+        card.querySelector(".name").textContent = newTitle;
+        card.querySelector(".url").textContent = newLink;
+
+        link = newLink;
+
+        saveCards();
+
+    };
 
     list.appendChild(card);
 
 }
 
+function saveCards(){
+
+    const data = [];
+
+    document.querySelectorAll(".card").forEach(card=>{
+
+        data.push({
+
+            title:card.querySelector(".name").textContent,
+
+            link:card.querySelector(".url").textContent
+
+        });
+
+    });
+
+    localStorage.setItem("favorites",JSON.stringify(data));
+
+}
+
+function loadCards(){
+
+    const data = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    data.forEach(item=>{
+
+        createCard(item.title,item.link);
+
+    });
+}
+
+loadCards();
+
+search.oninput = function(){
+
+    const text = search.value.toLowerCase();
+
+    document.querySelectorAll(".card").forEach(card=>{
+
+        const title = card.querySelector(".name").textContent.toLowerCase();
+
+        if(title.includes(text)){
+
+            card.style.display="flex";
+
+        }else{
+
+            card.style.display="none";
+
+        }
+
+    });
+
+}
+    
 </script>
 </body>
 </html>
