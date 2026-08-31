@@ -135,19 +135,30 @@ h1{
 }
 .card{
 
-    background:rgba(255,255,255,.12);
+background:rgba(255,255,255,.08);
 
-    border-radius:20px;
+border:1px solid rgba(255,255,255,.1);
 
-    padding:20px;
+border-radius:20px;
 
-    display:flex;
+padding:22px;
 
-    justify-content:space-between;
+display:flex;
 
-    align-items:center;
+justify-content:space-between;
 
-    animation:show .3s;
+align-items:center;
+
+transition:.25s;
+
+animation:show .25s;
+
+}
+.card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 0 30px rgba(0,0,0,.35);
 
 }
 
@@ -318,6 +329,38 @@ transition:.2s;
 transform:scale(1.08);
 
 }
+
+.top{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+}
+
+.icon{
+
+width:42px;
+
+height:42px;
+
+border-radius:12px;
+
+background:white;
+
+}
+
+.date{
+
+margin-top:8px;
+
+font-size:13px;
+
+color:#999;
+
+}
 </style>
 
 </head>
@@ -401,11 +444,19 @@ function createCard(title, link){
     card.innerHTML = `
         <div class="left">
 
-            <div class="name">${title}</div>
+    <div class="top">
 
-            <div class="url">${link}</div>
+        <img class="icon">
 
-        </div>
+        <div class="name">${title}</div>
+
+    </div>
+
+    <div class="url">${link}</div>
+
+    <div class="date"></div>
+
+</div>
 
         <div class="right">
 
@@ -421,6 +472,25 @@ function createCard(title, link){
 
         </div>
     `;
+
+    const icon = card.querySelector(".icon");
+
+try{
+
+    const domain = new URL(link).hostname;
+
+    icon.src = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=64";
+
+}catch{
+
+    icon.src = "";
+
+}
+
+    const date = new Date();
+
+card.querySelector(".date").textContent =
+"Добавлено: " + date.toLocaleDateString() + " " + date.toLocaleTimeString();
 
     // Открыть сайт
     card.querySelector(".open").onclick = function(){
@@ -530,7 +600,20 @@ search.oninput = function(){
     });
 
 }
-    
+
+    titleInput.addEventListener("keydown",function(e){
+
+    if(e.key=="Enter")
+        addButton.click();
+
+});
+
+linkInput.addEventListener("keydown",function(e){
+
+    if(e.key=="Enter")
+        addButton.click();
+
+});
 </script>
 </body>
 </html>
