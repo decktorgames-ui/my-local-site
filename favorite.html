@@ -204,6 +204,28 @@ button:hover {
         transform: translateY(0);
     }
 }
+
+#category {
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+    outline: none;
+    font-size: 16px;
+    cursor: pointer;
+    background: white;
+    color: #222;
+}
+
+.category {
+    display: inline-block;
+    width: fit-content;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: rgba(63, 140, 255, 0.2);
+    color: #8bb8ff;
+    font-size: 13px;
+    margin-top: 3px;
+}
 </style>
 </head>
 <body>
@@ -214,11 +236,19 @@ button:hover {
     <input id="search" type="text" placeholder="🔍 Поиск...">
 
     <div class="inputBox">
-        <input id="title" type="text" placeholder="Название сайта">
-        <input id="link" type="text" placeholder="https://example.com">
-        <button id="addButton">Добавить</button>
-    </div>
+    <input id="title" type="text" placeholder="Название сайта">
+    <input id="link" type="text" placeholder="https://example.com">
 
+    <select id="category">
+        <option value="AI">🤖 AI</option>
+        <option value="Игры">🎮 Игры</option>
+        <option value="Учёба">📚 Учёба</option>
+        <option value="Программирование">💻 Программирование</option>
+        <option value="Другое">📁 Другое</option>
+    </select>
+
+    <button id="addButton">Добавить</button>
+</div>
     <div id="line"></div>
     <div id="list"></div>
 </div>
@@ -229,6 +259,7 @@ const linkInput = document.getElementById("link");
 const addButton = document.getElementById("addButton");
 const list = document.getElementById("list");
 const search = document.getElementById("search");
+const categoryInput = document.getElementById("category");
 
 function normalizeUrl(url) {
     if (!/^https?:\/\//i.test(url)) {
@@ -238,8 +269,9 @@ function normalizeUrl(url) {
 }
 
 addButton.onclick = function() {
-    const title = titleInput.value.trim();
-    let link = linkInput.value.trim();
+const title = titleInput.value.trim();
+let link = linkInput.value.trim();
+const category = categoryInput.value;
 
     if (title === "" || link === "") {
         alert("Заполните все поля.");
@@ -249,14 +281,14 @@ addButton.onclick = function() {
     link = normalizeUrl(link);
     const dateStr = "Добавлено: " + new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString();
 
-    createCard(title, link, dateStr);
+    createCard(title, link, dateStr, category);
     saveCards();
 
     titleInput.value = "";
     linkInput.value = "";
 };
 
-function createCard(title, link, dateStr) {
+function createCard(title, link, dateStr, category = "Другое") {
     const card = document.createElement("div");
     card.className = "card";
 
@@ -267,6 +299,7 @@ function createCard(title, link, dateStr) {
                 <div class="name"></div>
             </div>
             <div class="url"></div>
+            <div class="category"></div>
             <div class="date"></div>
         </div>
         <div class="right">
@@ -282,6 +315,7 @@ function createCard(title, link, dateStr) {
     card.querySelector(".name").textContent = title;
     card.querySelector(".url").textContent = link;
     card.querySelector(".date").textContent = dateStr;
+    card.querySelector(".category").textContent = category;
 
     updateFavicon(card.querySelector(".icon"), link);
 
@@ -337,10 +371,11 @@ function updateFavicon(imgElement, url) {
 function saveCards() {
     const data = [];
     document.querySelectorAll(".card").forEach(card => {
-        data.push({
-            title: card.querySelector(".name").textContent,
-            link: card.querySelector(".url").textContent,
-            date: card.querySelector(".date").textContent
+       data.push({
+    title: card.querySelector(".name").textContent,
+    link: card.querySelector(".url").textContent,
+    category: card.querySelector(".category").textContent,
+    date: card.querySelector(".date").textContent
         });
     });
     localStorage.setItem("favorites", JSON.stringify(data));
@@ -349,8 +384,13 @@ function saveCards() {
 function loadCards() {
     const data = JSON.parse(localStorage.getItem("favorites")) || [];
     data.forEach(item => {
-        createCard(item.title, item.link, item.date || "");
-    });
+    createCard(
+        item.title,
+        item.link,
+        item.date || "",
+        item.category || "Другое"
+    );
+});
 }
 
 loadCards();
