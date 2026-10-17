@@ -14,8 +14,11 @@
         height: 100%;
         width: 100%;
         background-image: url(178777-amoled-atmosfera-ekoregion-priroda-poslesvechenie-1920x1080.jpg);
+        background-size: cover;
+        background-position: center;
       }
 
+      /* Общие стили для всех кнопок через классы, чтобы не ломать дизайн */
       .calculse button {
         width: 40%;
         height: 55%;
@@ -29,25 +32,13 @@
         text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.6);
         border: none;
         border-radius: 30px;
-
         position: absolute;
+        cursor: pointer;
         background-image: url(4d9ba51ddd6e842980652b102e7d475c.jpg);
         background-position: center;
         background-size: cover;
       }
 
-      .Information button {
-        width: 51%;
-        height: 25%;
-        margin-left: 46%;
-        margin-top: 3%;
-        box-shadow: 6px 6px 30px rgba(0, 0, 0, 0.6);
-
-        border: none;
-        border-radius: 30px;
-
-        position: absolute;
-      }
       .English button {
         width: 40%;
         height: 25%;
@@ -61,10 +52,42 @@
         font-size: 300%;
         color: rgb(253, 255, 230);
         text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.6);
-
         position: absolute;
+        cursor: pointer;
         background-image: url(Cat_with_cool_glases.jpg);
         background-position: 0 35%;
+        background-size: cover;
+      }
+
+      /* Стили для блока Information и кнопок внутри него */
+      .Information button {
+        width: 51%;
+        height: 25%;
+        margin-left: 46%;
+        margin-top: 3%;
+        box-shadow: 6px 6px 30px rgba(0, 0, 0, 0.6);
+        border: none;
+        border-radius: 30px;
+        position: absolute;
+        cursor: pointer;
+        font-size: 250%;
+        color: rgb(253, 255, 230);
+        text-shadow: 4px 4px 15px rgba(0, 0, 0, 0.6);
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* Отдельные позиции для кнопок внутри Information */
+      .btn-h-suki {
+        top: 0; /* привязано к позиции блока или маргинам */
+      }
+      .btn-f95zone {
+        margin-top: 17.4% !important;
+        background-image: url('images.jpg');
+      }
+      .btn-favorite {
+        margin-top: 32% !important;
+        background-color: #333; /* Запасной цвет, если нет картинки */
       }
     </style>
   </head>
@@ -74,20 +97,24 @@
         <button>ryuugames</button>
       </a>
     </div>
+
     <div class="English">
       <a href="https://www.dreemy.ai/">
         <button>dreemy.ai</button>
       </a>
     </div>
+
     <div class="Information">
       <a href="https://www.h-suki.com/">
-        <button>h-suki</button>
+        <button style="margin-top: 3%;">h-suki</button>
       </a>
-<a href="https://f95zone.to/" style="display: inline-block; margin-top: 17.4%; background-image: url('images.jpg');">
-  <button style="background: transparent; border: none; cursor: pointer; width: 100%; height: 100%;">F95zone</button>
-</a>
+      
+      <a href="https://f95zone.to/">
+        <button class="btn-f95zone">F95zone</button>
+      </a>
+      
       <a href="favorite.html">
-        <button style="margin-top: 32%">Favorite</button>
+        <button class="btn-favorite">Favorite</button>
       </a>
     </div>
   </body>
